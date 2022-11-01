@@ -1,0 +1,64 @@
+mongo-url = "mongodb://localhost:27017/myapp"
+
+elasticsearch-urls = ["http://localhost:9200"]
+
+# COLLECTIONS TO LOOK FOR CHANGES FROM MONGODB
+direct-read-namespaces = ["myapp.items", "myapp.inventory", "myapp.pricing"]
+
+
+# namespace-regex = '^myapp\.$'
+
+# to enable resume we need write access in mongodb
+# config-database-name = "monstachechanges"
+# resume processing from a timestamp saved in a previous run
+# resume = true
+
+# Number of  go routines concurrently pushing documents to Elasticsearch
+elasticsearch-max-conns = 6
+
+# propogate dropped collections in MongoDB as index deletes in Elasticsearch
+dropped-collections = true
+# propogate dropped databases in MongoDB as index deletes in Elasticsearch
+dropped-databases = true
+
+
+# -------------------------------AWS-ELS-CREDENTIALS------------------------
+
+# [aws-connect]
+# access-key = ""
+# secret-key = ""
+# region = ""
+
+# -------------------------------MAPPERS ----------------------------
+[[mapping]]
+namespace = "myapp.items"
+index = "items"
+
+[[mapping]]
+namespace = "myapp.pricing"
+index = "pricing"
+
+[[mapping]]
+namespace = "myapp.inventory"
+index = "inventory"
+
+# ----------------------------JS MIDDLEWARES----------------------------
+
+[[script]]
+namespace = "myapp.items"
+path = "./scripts/mapper.js"
+routing = true
+
+[[script]]
+namespace = "myapp.pricing"
+path = "./scripts/mapper.js"
+routing = true
+
+[[script]]
+namespace = "myapp.inventory"
+path = "./scripts/mapper.js"
+routing = true
+
+# ----------------------------------------LOGS---------------------
+[logs]
+error = "./logs/error.log"
