@@ -1,0 +1,19 @@
+version: '3'
+services:
+    mongodb-els-sync:
+        image: rwynn/monstache:latest
+        container_name: mongo_els_sync
+        working_dir: /monstache
+        command: -f ./sync.toml
+        volumes:
+            - ./monstache:/monstache/
+        restart: "no"
+
+    mongodb-els-changes:
+        image: rwynn/monstache:latest
+        container_name: mongo_els_changes
+        working_dir: /monstache
+        command: -f ./changes.toml
+        volumes:
+            - ./monstache:/monstache/
+        restart: "always"
